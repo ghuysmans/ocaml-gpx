@@ -130,6 +130,175 @@ and date_time = (float * float option) (* UTC time, timezone offset *)
 
 let opt_apply f = function None -> None | Some x -> Some (f x)
 
+module Make =
+  struct
+    let gpx
+      ?metadata
+      ?wpts:(wpt = [])
+      ?rtes:(rte = [])
+      ?trks:(trk = [])
+      ?extensions
+      ~creator =
+      { version = "1.1";
+        creator;
+        metadata;
+        wpt;
+        rte;
+        trk;
+        extensions; }
+
+    let metadata
+      ?name
+      ?description:desc
+      ?author
+      ?copyright
+      ?(link = [])
+      ?time
+      ?keywords
+      ?bounds
+      ?extensions () =
+      { name;
+        desc;
+        author;
+        copyright;
+        link;
+        time;
+        keywords;
+        bounds;
+        extensions; }
+
+    let wpt
+      ?elevation:ele
+      ?magnetic_variation:magvar
+      ?height_from_sea_level:geoidheight
+      ?comment:cmt
+      ?source:src
+      ?symbol:sym
+      ?typ
+      ?fix
+      ?sat
+      ?horizontal_dilution_of_precision:hdop
+      ?vertical_dilution_of_precision:vdop
+      ?position_dilution_of_precision:pdop
+      ?last_dgps:ageofdgpsdata
+      ?id_of_dgps:dgpsid
+      ?time
+      ?name
+      ?description:desc
+      ?(link = [])
+      ?extensions
+      ~latitude:lat
+      ~longitude:lon =
+      { lat; lon; ele;
+        magvar;
+        geoidheight;
+        cmt;
+        src;
+        sym;
+        typ;
+        fix;
+        sat;
+        hdop;
+        vdop;
+        pdop;
+        time;
+        name;
+        desc;
+        link;
+        dgpsid;
+        ageofdgpsdata;
+        extensions; }
+
+    let trk
+      ?name
+      ?comment:cmt
+      ?description:desc
+      ?source:src
+      ?(link = [])
+      ?number
+      ?typ
+      ?extensions
+      ?tracks:(trkseg = []) () =
+      { name;
+        desc;
+        link;
+        cmt;
+        src;
+        typ;
+        number;
+        extensions;
+        trkseg; }
+
+    let rte
+      ?name
+      ?comment:cmt
+      ?description:desc
+      ?source:src
+      ?(link = [])
+      ?number
+      ?typ
+      ?extensions
+      ?routes:(rtept = []) () =
+      { name;
+        desc;
+        link;
+        src;
+        typ;
+        cmt;
+        number;
+        extensions;
+        rtept; }
+
+    (* woh *)
+    let trkseg ?pts:(trkpt = []) ?extensions () =
+      { trkpt; extensions; }
+
+    let copyright
+      ?(year = Some (Unix.time () |> Unix.gmtime |> fun x -> x.Unix.tm_year))
+      ?license
+      ~author =
+      { author; year; license; }
+
+    let person ?name ?email ?link () =
+      { name; email; link; }
+
+    let link ?text ?typ ~href =
+      { href; text; typ; }
+
+    let email ~id ~domain =
+      { id; domain; }
+
+    let bounds
+      ~min_latitude:minlat
+      ~min_longitude:minlon
+      ~max_latitude:maxlat
+      ~max_longitude:maxlon =
+      { minlat;
+        minlon;
+        maxlat;
+        maxlon; }
+
+    let latitude value =
+      if -180.0 <= value && value <= 180.0
+      then value
+      else raise (Invalid_argument "make_latitude")
+
+    let longitude value =
+      if -180.0 <= value && value <= 180.0
+      then value
+      else raise (Invalid_argument "make_longitude")
+
+    let degrees value =
+      if 0.0 <= value && value <= 360.0
+      then value
+      else raise (Invalid_argument "make_degrees")
+
+    let dgps_station value =
+      if 0 <= value && value <= 1023
+      then value
+      else raise (Invalid_argument "make_dgps_station")
+  end
+
 module Of_XML =
   struct
     let attrib = Xml.attrib
