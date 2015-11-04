@@ -1,126 +1,137 @@
-type gpx = {
-  version: string; (* Must be 1.1 *)
-  creator: string;
-  metadata: metadata option;
-  wpt: wpt list;
-  rte: rte list;
-  trk: trk list;
-  extensions: extension option;
-}
+type gpx =
+  {
+    version    : string; (* Must be 1.1 *)
+    creator    : string;
+    metadata   : metadata option;
+    wpt        : wpt list;
+    rte        : rte list;
+    trk        : trk list;
+    extensions : extension option;
+  }
 
- and metadata = {
-   name: string option;
-   desc: string option;
-   author: person option;
-   copyright: copyright option;
-   link: link list;
-   time: date_time option;
-   keywords: string option;
-   bounds: bounds option;
-   extensions: extension option;
- }
+and metadata =
+  {
+    name       : string option;
+    desc       : string option;
+    author     : person option;
+    copyright  : copyright option;
+    link       : link list;
+    time       : date_time option;
+    keywords   : string option;
+    bounds     : bounds option;
+    extensions : extension option;
+  }
 
- and wpt = {
-   lat: latitude;
-   lon: longitude;
-   time: date_time option;
-   ele: float option;
-   magvar: degrees option;
-   geoidheight: float option;
-   name: string option;
-   cmt: string option;
-   desc: string option;
-   src: string option;
-   link: link list;
-   sym: string option;
-   typ: string option;
-   fix: fix option;
-   sat: int option;
-   vdop: float option;
-   hdop: float option;
-   pdop: float option;
-   ageofdgpsdata: float option;
-   dgpsid: dgps_station option;
-   extensions: extension option;
- }
+and wpt =
+  {
+    lat           : latitude;
+    lon           : longitude;
+    time          : date_time option;
+    ele           : float option;
+    magvar        : degrees option;
+    geoidheight   : float option;
+    name          : string option;
+    cmt           : string option;
+    desc          : string option;
+    src           : string option;
+    link          : link list;
+    sym           : string option;
+    typ           : string option;
+    fix           : fix option;
+    sat           : int option;
+    vdop          : float option;
+    hdop          : float option;
+    pdop          : float option;
+    ageofdgpsdata : float option;
+    dgpsid        : dgps_station option;
+    extensions    : extension option;
+  }
 
- and rte = {
-   name: string option;
-   cmt: string option;
-   desc: string option;
-   src: string option;
-   link: link list;
-   number: int option;
-   typ: string option;
-   extensions: extension option;
-   rtept: wpt list;
- }
+and rte =
+  {
+    name       : string option;
+    cmt        : string option;
+    desc       : string option;
+    src        : string option;
+    link       : link list;
+    number     : int option;
+    typ        : string option;
+    extensions : extension option;
+    rtept      : wpt list;
+  }
 
- and trk = {
-   name: string option;
-   cmt: string option;
-   desc: string option;
-   src: string option;
-   link: link list;
-   number: int option;
-   typ: string option;
-   extensions: extension option;
-   trkseg: trkseg list;
- }
+and trk =
+  {
+    name       : string option;
+    cmt        : string option;
+    desc       : string option;
+    src        : string option;
+    link       : link list;
+    number     : int option;
+    typ        : string option;
+    extensions : extension option;
+    trkseg     : trkseg list;
+  }
 
- and extension = Xml.xml
+and extension = Xml.xml
 
- and trkseg = {
-   trkpt: wpt list;
-   extensions: extension option;
- }
+and trkseg =
+  {
+    trkpt      : wpt list;
+    extensions : extension option;
+  }
 
- and copyright = {
-   author: string;
-   year: int option;
-   license: string option;
- }
+and copyright =
+  {
+    author  : string;
+    year    : int option;
+    license : string option;
+  }
 
- and link = {
-   href: string;
-   text: string option;
-   typ: string option;
- }
+and link =
+  {
+    href : string;
+    text : string option;
+    typ  : string option;
+  }
 
- and email = {
-   id: string;
-   domain: string;
- }
+and email =
+  {
+    id     : string;
+    domain : string;
+  }
 
- and person = {
-   name: string option;
-   email: email option;
-   link: link option;
- }
+and person =
+  {
+    name  : string option;
+    email : email option;
+    link  : link option;
+  }
 
- and bounds = {
-   minlat: latitude;
-   minlon: longitude;
-   maxlat: latitude;
-   maxlon: longitude;
- }
+and bounds =
+  {
+    minlat : latitude;
+    minlon : longitude;
+    maxlat : latitude;
+    maxlon : longitude;
+  }
 
- and latitude = float (* -180.0 <= value <= 180.0 *)
+and latitude = float (* -180.0 <= value <= 180.0 *)
 
- and longitude = float (* -180.0 <= value <= 180.0 *)
+and longitude = float (* -180.0 <= value <= 180.0 *)
 
- and degrees = float (* 0.0 <= value <= 360.0 *)
+and degrees = float (* 0.0 <= value <= 360.0 *)
 
- and fix = FIX_none | FIX_2d | FIX_3d | FIX_dgps | FIX_pps
+and fix = FIX_none | FIX_2d | FIX_3d | FIX_dgps | FIX_pps
 
- and dgps_station = int (* 0 <= value <= 1023 *)
+and dgps_station = int (* 0 <= value <= 1023 *)
 
- and date_time = (float * float option) (* UTC time, timezone offset *)
+and date_time = (float * float option) (* UTC time, timezone offset *)
 
 let opt_apply f = function None -> None | Some x -> Some (f x)
 
-module Of_XML = struct
-
+module Of_XML =
+  struct
     let attrib = Xml.attrib
 
     let opt_child xml tag =
@@ -130,8 +141,8 @@ module Of_XML = struct
     let opt_pcdata xml tag =
       opt_child xml tag
       |> opt_apply (fun x -> Xml.children x
-			     |> List.map Xml.pcdata
-			     |> String.concat "\n")
+      |> List.map Xml.pcdata
+      |> String.concat "\n")
 
     let opt_string xml tag =
       opt_pcdata xml tag
@@ -157,14 +168,13 @@ module Of_XML = struct
       | "pps"  -> FIX_pps
       | _      -> raise (Invalid_argument "fix_of_string")
 
-    let link xml = {
-        href = attrib xml "href";
+    let link xml =
+      { href = attrib xml "href";
         text = opt_string xml "text";
-        typ  = opt_string xml "type";
-      }
+        typ  = opt_string xml "type"; }
 
-    let wpt xml = {
-        lat           = attrib xml "lat" |> float_of_string;
+    let wpt xml =
+      { lat           = attrib xml "lat" |> float_of_string;
         lon           = attrib xml "lon" |> float_of_string;
         time          = opt_pcdata xml "time" |> opt_apply time_of_string;
         ele           = opt_float xml "ele";
@@ -184,11 +194,10 @@ module Of_XML = struct
         pdop          = opt_float xml "pdop";
         ageofdgpsdata = opt_float xml "ageofdgpsdata";
         dgpsid        = opt_int xml "dgpsid";
-        extensions    = opt_child xml "extensions";
-      }
+        extensions    = opt_child xml "extensions"; }
 
-    let rte xml = {
-        name       = opt_string xml "name";
+    let rte xml =
+      { name       = opt_string xml "name";
         cmt        = opt_string xml "cmt";
         desc       = opt_string xml "desc";
         src        = opt_string xml "src";
@@ -196,16 +205,14 @@ module Of_XML = struct
         number     = opt_int xml "number";
         typ        = opt_string xml "type";
         extensions = opt_child xml "extensions";
-        rtept      = List.map wpt (list xml "rtept");
-      }
+        rtept      = List.map wpt (list xml "rtept"); }
 
-    let trkseg xml = {
-        trkpt      = List.map wpt (list xml "trkpt");
-        extensions = opt_child xml "extensions";
-      }
+    let trkseg xml =
+      { trkpt      = List.map wpt (list xml "trkpt");
+        extensions = opt_child xml "extensions"; }
 
-    let trk xml = {
-        name       = opt_string xml "name";
+    let trk xml =
+      { name       = opt_string xml "name";
         cmt        = opt_string xml "cmt";
         desc       = opt_string xml "desc";
         src        = opt_string xml "src";
@@ -213,35 +220,30 @@ module Of_XML = struct
         number     = opt_int xml "number";
         typ        = opt_string xml "type";
         extensions = opt_child xml "extensions";
-        trkseg     = List.map trkseg (list xml "trkseg");
-      }
+        trkseg     = List.map trkseg (list xml "trkseg"); }
 
-    let email xml = {
-        id     = attrib xml "id";
-        domain = attrib xml "domain";
-      }
+    let email xml =
+      { id     = attrib xml "id";
+        domain = attrib xml "domain"; }
 
-    let person xml = {
-        name  = opt_string xml "name";
+    let person xml =
+      { name  = opt_string xml "name";
         email = opt_child xml "email" |> opt_apply email;
-        link  = opt_child xml "link" |> opt_apply link;
-      }
+        link  = opt_child xml "link" |> opt_apply link; }
 
-    let copyright xml = {
-        author  = attrib xml "author";
+    let copyright xml =
+      { author  = attrib xml "author";
         year    = opt_int xml "year";
-        license = opt_string xml "license";
-      }
+        license = opt_string xml "license"; }
 
-    let bounds xml = {
-        minlat = attrib xml "minlat" |> float_of_string;
+    let bounds xml =
+      { minlat = attrib xml "minlat" |> float_of_string;
         minlon = attrib xml "minlon" |> float_of_string;
         maxlat = attrib xml "maxlat" |> float_of_string;
-        maxlon = attrib xml "maxlon" |> float_of_string;
-      }
+        maxlon = attrib xml "maxlon" |> float_of_string; }
 
-    let metadata xml = {
-        name       = opt_string xml "name";
+    let metadata xml =
+      { name       = opt_string xml "name";
         desc       = opt_string xml "desc";
         author     = opt_child xml "author" |> opt_apply person;
         copyright  = opt_child xml "copyright" |> opt_apply copyright;
@@ -249,18 +251,16 @@ module Of_XML = struct
         time       = opt_pcdata xml "time" |> opt_apply time_of_string;
         keywords   = opt_string xml "keywords";
         bounds     = opt_child xml "bounds" |> opt_apply bounds;
-        extensions = opt_child xml "extensions";
-      }
+        extensions = opt_child xml "extensions"; }
 
-    let gpx xml = {
-        version    = attrib xml "version";
+    let gpx xml =
+      { version    = attrib xml "version";
         creator    = attrib xml "creator";
         metadata   = opt_child xml "metadata" |> opt_apply metadata;
         wpt        = List.map wpt (list xml "wpt");
         rte        = List.map rte (list xml "rte");
         trk        = List.map trk (list xml "trk");
-        extensions = opt_child xml "extensions";
-      }
+        extensions = opt_child xml "extensions"; }
 
     let trkpt = wpt
     let rtept = wpt
@@ -305,8 +305,9 @@ module To_XML = struct
       Xml.Element ("wpt",
                    [ ("lat", string_of_float x.lat) ;
                      ("lon", string_of_float x.lon) ],
-                   opt_apply (fun x -> wrap_string "time" (string_of_date_time x))
-                             x.time
+                   opt_apply
+                     (fun x -> wrap_string "time" (string_of_date_time x))
+                     x.time
                    @@@ opt_apply (wrap_float "ele") x.ele
                    @@@ opt_apply (wrap_float "degrees") x.magvar
                    @@@ opt_apply (wrap_float "geoidheight") x.geoidheight
