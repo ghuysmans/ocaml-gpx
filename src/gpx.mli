@@ -128,6 +128,115 @@ type gpx = {
 
  and date_time = (float * float option) (* UTC time, timezone offset *)
 
+module Make :
+  sig
+    val gpx :
+      ?metadata:metadata ->
+      ?wpts:wpt list ->
+      ?rtes:rte list ->
+      ?trks:trk list ->
+      ?extensions:extension ->
+      creator:string ->
+      gpx
+
+    val metadata :
+      ?name:string ->
+      ?description:string ->
+      ?author:person ->
+      ?copyright:copyright ->
+      ?link:link list ->
+      ?time:date_time ->
+      ?keywords:string ->
+      ?bounds:bounds ->
+      ?extensions:extension ->
+      unit -> metadata
+
+    val wpt :
+      ?elevation:float ->
+      ?magnetic_variation:degrees ->
+      ?height_from_sea_level:float ->
+      ?comment:string ->
+      ?source:string ->
+      ?symbol:string ->
+      ?typ:string ->
+      ?fix:fix ->
+      ?sat:int ->
+      ?horizontal_dilution_of_precision:float ->
+      ?vertical_dilution_of_precision:float ->
+      ?position_dilution_of_precision:float ->
+      ?last_dgps:float ->
+      ?id_of_dgps:dgps_station ->
+      ?time:date_time ->
+      ?name:string ->
+      ?description:string ->
+      ?link:link list ->
+      ?extensions:extension ->
+      latitude:latitude ->
+      longitude:longitude ->
+      wpt
+
+    val trk :
+      ?name:string ->
+      ?comment:string ->
+      ?description:string ->
+      ?source:string ->
+      ?link:link list ->
+      ?number:int ->
+      ?typ:string ->
+      ?extensions:extension ->
+      ?tracks:trkseg list ->
+      unit -> trk
+
+    val rte :
+      ?name:string ->
+      ?comment:string ->
+      ?description:string ->
+      ?source:string ->
+      ?link:link list ->
+      ?number:int ->
+      ?typ:string ->
+      ?extensions:extension ->
+      ?routes:wpt list ->
+      unit -> rte
+
+    val trkseg :
+      ?pts:wpt list ->
+      ?extensions:extension ->
+      unit -> trkseg
+
+    val copyright :
+      ?year:int option ->
+      ?license:string ->
+      author:string ->
+      copyright
+
+    val person :
+      ?name:string ->
+      ?email:email ->
+      ?link:link ->
+      unit -> person
+
+    val link :
+      ?text:string ->
+      ?typ:string ->
+      href:string ->
+      link
+
+    val email : id:string -> domain:string -> email
+
+    val bounds :
+      min_latitude:latitude ->
+      min_longitude:longitude ->
+      max_latitude:latitude ->
+      max_longitude:longitude ->
+      bounds
+
+    val latitude : float -> float
+    val longitude : float -> float
+    val degrees : float -> float
+    val dgps_station : int -> int
+  end
+
 (** {2 Whole GPX }
     These two functions are probably all you will need.
     They allow you to go from a [Xml.xml] value to a [gpx] record,
