@@ -1,0 +1,18 @@
+OASISFormat:            0.4
+Name:                   gpx
+Version:                0.3
+Synopsis:               GPX in OCaml
+Description:            GPX in OCaml
+Authors:                Julien Sagot
+Maintainers:            Romain Calascibetta <romain.calascibetta@gmail.com>
+Homepage:               https://github.com/LamaUrbain/ocaml-gpx
+License:                MIT
+Plugins:                META (0.3), DevFiles (0.3)
+BuildTools:             ocamlbuild
+OCamlVersion:           >= 4.02
+AlphaFeatures:          ocamlbuild_more_args
+
+Library gpx
+  Path:                 src
+  Modules:              Gpx
+  BuildDepends:         xml-light, ISO8601
