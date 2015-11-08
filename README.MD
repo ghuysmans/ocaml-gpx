@@ -6,6 +6,8 @@ Provides a `Gpx` module defining types to match GPX document
 structure and functions to navigate between `gpx` type and
 `Xml.xml` from `xml-light` OCaml library.
 
+[![Build Status](https://travis-ci.org/LamaUrbain/ocaml-gpx.svg)](https://travis-ci.org/LamaUrbain/ocaml-gpx)
+
 # Installation
 
 Via opam:
