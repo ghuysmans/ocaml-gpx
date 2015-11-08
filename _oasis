@@ -18,3 +18,16 @@ Library gpx
   BuildDepends:         xml-light, ISO8601
   NativeOpt:            -w '-30'
   ByteOpt:              -w '-30'
+
+Executable test
+  Install:              false
+  Path:                 src_test
+  MainIs:               test.ml
+  CompiledObject:       best
+  BuildDepends:         gpx, re.str, alcotest
+
+Test test
+  Run$:                 flag(tests)
+  TestTools:            test
+  Command:              $test
+  WorkingDirectory:     .
