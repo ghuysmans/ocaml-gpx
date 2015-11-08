@@ -14,3 +14,4 @@ setup.log
 *.byte
 *.native
 *.tar.gz
+_tests/
