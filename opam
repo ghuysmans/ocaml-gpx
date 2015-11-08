@@ -13,12 +13,9 @@ build: [
   [ make ]
 ]
 build-test: [
-  [ "./configure" "--enable-tests" ]
+  [ "./configure" "--prefix=%{prefix}%" "--enable-tests" ]
   [ make "test" ]
 ]
-
-install: [ make "install" ]
-remove: [ make "uninstall" ]
 
 depends: [
   "oasis" { build }
@@ -28,4 +25,4 @@ depends: [
   "alcotest" { test }
 ]
 
-available:    [ ocaml-version >= "4.01" ]
+available:    [ ocaml-version >= "4.02" ]
