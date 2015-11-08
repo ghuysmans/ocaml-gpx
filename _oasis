@@ -20,6 +20,7 @@ Library gpx
   ByteOpt:              -w '-30'
 
 Executable test
+  Build$:               flag(tests)
   Install:              false
   Path:                 src_test
   MainIs:               test.ml
