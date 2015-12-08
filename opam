@@ -17,6 +17,9 @@ build-test: [
   [ make "test" ]
 ]
 
+install: [ make "install" ]
+remove: ["ocamlfind" "remove" "gpx"]
+
 depends: [
   "oasis" { build }
   "xml-light"
