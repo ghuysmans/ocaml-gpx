@@ -188,7 +188,7 @@ module Make =
       ?(link = [])
       ?extensions
       ~latitude:lat
-      ~longitude:lon =
+      ~longitude:lon () =
       { lat; lon; ele;
         magvar;
         geoidheight;
