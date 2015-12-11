@@ -173,7 +173,7 @@ module Make :
       ?extensions:extension ->
       latitude:latitude ->
       longitude:longitude ->
-      wpt
+      unit -> wpt
 
     val trk :
       ?name:string ->
