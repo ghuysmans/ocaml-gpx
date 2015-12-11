@@ -148,7 +148,7 @@ module Make :
       ?trks:trk list ->
       ?extensions:extension ->
       creator:string ->
-      gpx
+      unit -> gpx
 
     val metadata :
       ?name:string ->
