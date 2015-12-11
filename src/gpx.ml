@@ -127,7 +127,7 @@ module Make =
       ?rtes:(rte = [])
       ?trks:(trk = [])
       ?extensions
-      ~creator =
+      ~creator () =
       { version = "1.1";
         creator;
         metadata;
