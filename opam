@@ -22,7 +22,7 @@ remove: ["ocamlfind" "remove" "gpx"]
 
 depends: [
   "oasis" { build }
-  "xml-light"
+  "xmlm"
   "ISO8601"
   "re" { test }
   "alcotest" { test }
