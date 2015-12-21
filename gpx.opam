@@ -33,7 +33,7 @@ build: [
   ]
 ]
 
-depends: [ "xml-light"
+depends: [ "xmlm"
            "ISO8601"
            "dune"
            "re" {with-test & (>= "1.7.2")}
