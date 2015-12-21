@@ -15,7 +15,7 @@ AlphaFeatures:          ocamlbuild_more_args
 Library gpx
   Path:                 src
   Modules:              Gpx
-  BuildDepends:         xml-light, ISO8601
+  BuildDepends:         xmlm, ISO8601
   NativeOpt:            -w '-30'
   ByteOpt:              -w '-30'
 

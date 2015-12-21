@@ -9,6 +9,31 @@
     Metadata and extensions are represented as [Xml.xml],
     from Xml-light library. *)
 
+module X :
+  sig
+    type t = Node of Xmlm.tag * t list | Data of string
+
+    val node : string -> (string * string) list -> t list -> t
+    val pcdata : string -> t
+    val tag_is : string -> t -> bool
+    val get_pcdata : t -> string
+    val get_attr : string -> t -> string
+    val childs : t -> t list
+
+    val to_xmlm : ?dtd:string -> t -> Xmlm.output -> unit
+    val of_xmlm : Xmlm.input -> Xmlm.dtd * t
+
+    val to_buffer :
+      ?ns_prefix:(string -> string option) -> t ->
+      Buffer.t -> unit
+
+    val to_string :
+      ?ns_prefix:(string -> string
+      option) -> t -> string
+
+    val of_string : string -> t
+end
+
 type gpx =
   {
     version    : string; (* Must be 1.1 *)
@@ -84,7 +109,7 @@ and trk =
     trkseg     : trkseg list;
   }
 
-and extension = Xml.xml
+and extension = X.t
 
 and trkseg =
   {
@@ -253,8 +278,8 @@ module Make :
     They allow you to go from a [Xml.xml] value to a [gpx] record,
     and vice versa. *)
 
-val of_xml : Xml.xml -> gpx
-val to_xml : gpx -> Xml.xml
+val of_xml : X.t -> gpx
+val to_xml : gpx -> X.t
 
 (** {2 GPX parts }
     If you are interested in parsing a part of GPX only,
@@ -263,23 +288,23 @@ val to_xml : gpx -> Xml.xml
 (** From a [Xml.xml] value *)
 module Of_XML :
   sig
-    val gpx    : Xml.xml -> gpx
-    val rte    : Xml.xml -> rte
-    val rtept  : Xml.xml -> wpt
-    val trk    : Xml.xml -> trk
-    val trkpt  : Xml.xml -> wpt
-    val trkseg : Xml.xml -> trkseg
-    val wpt    : Xml.xml -> wpt
+    val gpx    : X.t -> gpx
+    val rte    : X.t -> rte
+    val rtept  : X.t -> wpt
+    val trk    : X.t -> trk
+    val trkpt  : X.t -> wpt
+    val trkseg : X.t -> trkseg
+    val wpt    : X.t -> wpt
   end
 
 (** To a [Xml.xml] value *)
 module To_XML :
   sig
-    val gpx    : gpx -> Xml.xml
-    val rte    : rte -> Xml.xml
-    val rtept  : wpt -> Xml.xml
-    val trk    : trk -> Xml.xml
-    val trkpt  : wpt -> Xml.xml
-    val trkseg : trkseg -> Xml.xml
-    val wpt    : wpt -> Xml.xml
+    val gpx    : gpx -> X.t
+    val rte    : rte -> X.t
+    val rtept  : wpt -> X.t
+    val trk    : trk -> X.t
+    val trkpt  : wpt -> X.t
+    val trkseg : trkseg -> X.t
+    val wpt    : wpt -> X.t
   end

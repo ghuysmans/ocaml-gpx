@@ -33,7 +33,7 @@ let gpx =
     struct
       type t = Gpx.gpx
 
-      let pp fmt x = Format.pp_print_string fmt (Gpx.to_xml x |> Xml.to_string)
+      let pp fmt x = Format.pp_print_string fmt (Gpx.to_xml x |> Gpx.X.to_string)
 
       let equal = (=)
     end
@@ -44,7 +44,7 @@ let make_test filename =
   `Quick,
   (fun () ->
     let data = load_file filename
-      |> Xml.parse_string
+      |> Gpx.X.of_string
       |> Gpx.of_xml
     in
     Alcotest.(check gpx) "same" data data)
