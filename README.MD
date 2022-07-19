@@ -4,7 +4,7 @@ OCaml library for GPX documents manipulation.
 
 Provides a `Gpx` module defining types to match GPX document
 structure and functions to navigate between `gpx` type and
-`Xml.xml` from `xml-light` OCaml library.
+XML trees (`X.t`).
 
 # Installation
 
@@ -14,17 +14,21 @@ Via opam:
 
 # Usage
 
-`Gpx.of_xml` returns a `Gpx.gpx` value from a `Xml.xml` value.
+`Gpx.of_xml` returns a `Gpx.gpx` value from a `Gpx.X.t` value.
 
-`Gpx.to_xml` returns a `Xml.xml` value from a `Gpx.gpx` value.
+`Gpx.to_xml` returns a `Gpx.X.t` value from a `Gpx.gpx` value.
 
 Example:
 
-    let _ = Xml.parse_in stdin
-            |> Gpx.of_xml
-            |> Gpx.to_xml
-            |> Xml.to_string
-            |> print_endline
+```ocaml
+let _ = Xmlm.make_input (`Channel stdin)
+        |> Gpx.X.of_xmlm
+        |> snd
+        |> Gpx.of_xml
+        |> Gpx.to_xml
+        |> Gpx.X.to_string
+        |> print_endline
+```
 
 # Documentation
 
