@@ -1,0 +1,3 @@
+[submodule "samples"]
+	path = src_test/samples
+	url = https://github.com/gps-touring/sample-gpx.git
