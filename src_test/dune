@@ -1,0 +1,4 @@
+(test
+ (name test)
+ (flags (:standard -w -30-16))
+ (libraries gpx re.str alcotest))
