@@ -22,5 +22,5 @@
   dune
   xmlm
   ISO8601
-  (re :with-test)
+  (re (and :with-test (>= 1.7.2)))
   (alcotest :with-test)))
